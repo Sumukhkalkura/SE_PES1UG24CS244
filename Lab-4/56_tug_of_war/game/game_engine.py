@@ -40,8 +40,18 @@ class GameEngine:
             return
 
         now = pygame.time.get_ticks()
-        if now - self.last_computer_pull >= self.computer_pull_cooldown:
+
+        panic_threshold = self.rope.left_win_x + 100
+        panic_mode = self.rope.marker_x <= panic_threshold
+
+        if panic_mode:
+            computer_cooldown = 90
+            computer_variance = random.uniform(1.0, 1.5)
+        else:
+            computer_cooldown = self.computer_pull_cooldown
             computer_variance = random.uniform(0.7, 1.2)
+
+        if now - self.last_computer_pull >= computer_cooldown:
             self.rope.pull_right(computer_variance)
             self.last_computer_pull = now
 
