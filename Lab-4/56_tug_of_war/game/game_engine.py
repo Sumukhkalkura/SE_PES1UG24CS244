@@ -33,6 +33,11 @@ class GameEngine:
         self.winner = None
         self.game_state = "PLAYING"
 
+        # Task 4: 45-second timer and Sudden Death
+        self.match_duration = 45000
+        self.match_start_time = pygame.time.get_ticks()
+        self.sudden_death = False
+
         self.computer_pull_cooldown = 180
         self.last_computer_pull = pygame.time.get_ticks()
 
@@ -45,13 +50,18 @@ class GameEngine:
                 self.reset()
             return
 
-        # Task 1:
-        # Allow reliable rapid alternating A/D input without
-        # depending on KEYUP synchronization.
+        # Task 1: Reliable alternating A/D input
         if event.type == pygame.KEYDOWN:
             if event.key in (pygame.K_a, pygame.K_d):
                 if event.key != self.last_key:
-                    self.rope.pull_left(1.0)
+
+                    # Task 4:
+                    # Player pulling power doubles in Sudden Death
+                    player_strength = (
+                        2.0 if self.sudden_death else 1.0
+                    )
+
+                    self.rope.pull_left(player_strength)
                     self.last_key = event.key
 
     def update(self):
@@ -60,9 +70,17 @@ class GameEngine:
 
         now = pygame.time.get_ticks()
 
+        # Task 4:
+        # Enter Sudden Death after 45 seconds.
+        elapsed_time = now - self.match_start_time
+
+        if elapsed_time >= self.match_duration:
+            self.sudden_death = True
+
         # Task 2:
-        # Computer enters panic mode when the player gets
-        # within 100 pixels of the player's winning boundary.
+        # Dynamic AI Panic Surge.
+        # When the player approaches the green winning line,
+        # the computer reacts faster and more aggressively.
         panic_threshold = self.rope.left_win_x + 100
         panic_mode = self.rope.marker_x <= panic_threshold
 
@@ -73,10 +91,18 @@ class GameEngine:
             computer_cooldown = self.computer_pull_cooldown
             computer_variance = random.uniform(0.7, 1.2)
 
+        # Task 4:
+        # Computer pulling POWER doubles during Sudden Death.
+        # Its cooldown is left unchanged so Task 2 still controls
+        # how frequently the computer pulls.
+        if self.sudden_death:
+            computer_variance *= 2.0
+
         if now - self.last_computer_pull >= computer_cooldown:
             self.rope.pull_right(computer_variance)
             self.last_computer_pull = now
 
+        # Existing win detection
         result = self.rope.check_winner()
 
         if result:
@@ -84,19 +110,29 @@ class GameEngine:
             self.game_state = "GAME_OVER"
 
     def reset(self):
+        # Reset rope position
         self.rope.reset()
 
+        # Reset input
         self.last_key = None
         self.is_pull_locked = False
 
+        # Reset game state
         self.winner = None
         self.game_state = "PLAYING"
 
+        # Task 4:
+        # Start a fresh regulation period
+        self.sudden_death = False
+        self.match_start_time = pygame.time.get_ticks()
+
+        # Reset computer timing
         self.last_computer_pull = pygame.time.get_ticks()
 
     def render(self, screen):
         screen.fill((30, 32, 36))
 
+        # Mud / center area
         mud_rect = pygame.Rect(
             self.width // 2 - 120,
             self.height // 2 - 80,
@@ -112,21 +148,23 @@ class GameEngine:
         )
 
         # Task 3:
-        # Calculate visual tension from the distance of the
-        # rope marker from the center.
+        # Calculate visual tension based on how far the
+        # rope marker is from the center.
         center_x = self.width // 2
         max_distance = center_x - self.rope.left_win_x
-        current_distance = abs(self.rope.marker_x - center_x)
+        current_distance = abs(
+            self.rope.marker_x - center_x
+        )
 
         tension = min(
             current_distance / max_distance,
             1.0
         )
 
-        # Rope vibration becomes stronger as tension increases.
+        # Task 3: animated rope
         self.rope.render(screen, tension)
 
-        # Pullers lean away from each other as tension increases.
+        # Task 3: puller leaning
         lean_amount = int(10 * tension)
 
         self.player.render(
@@ -139,6 +177,7 @@ class GameEngine:
             lean_amount
         )
 
+        # Existing instruction text
         inst_surf = self.font_small.render(
             "Alternate [A] and [D] keys rapidly to pull!",
             True,
@@ -153,6 +192,54 @@ class GameEngine:
             )
         )
 
+        # Task 4:
+        # Calculate remaining regulation time.
+        now = pygame.time.get_ticks()
+        elapsed_time = now - self.match_start_time
+        remaining_time = max(
+            0,
+            self.match_duration - elapsed_time
+        )
+
+        # Round upward so a new match visibly begins at 45.
+        seconds_remaining = (
+            remaining_time + 999
+        ) // 1000
+
+        timer_surf = self.font_small.render(
+            f"Time: {seconds_remaining}",
+            True,
+            (240, 240, 240)
+        )
+
+        screen.blit(
+            timer_surf,
+            (
+                self.width // 2
+                - timer_surf.get_width() // 2,
+                70
+            )
+        )
+
+        # Task 4:
+        # Clearly display Sudden Death once regulation expires.
+        if self.sudden_death and self.game_state == "PLAYING":
+            sudden_death_surf = self.font_big.render(
+                "SUDDEN DEATH",
+                True,
+                (255, 80, 80)
+            )
+
+            screen.blit(
+                sudden_death_surf,
+                (
+                    self.width // 2
+                    - sudden_death_surf.get_width() // 2,
+                    100
+                )
+            )
+
+        # Existing Game Over screen
         if self.game_state == "GAME_OVER":
             overlay = pygame.Surface(
                 (self.width, self.height),
@@ -179,7 +266,8 @@ class GameEngine:
             screen.blit(
                 text_surf,
                 (
-                    self.width // 2 - text_surf.get_width() // 2,
+                    self.width // 2
+                    - text_surf.get_width() // 2,
                     self.height // 2 - 50
                 )
             )
@@ -193,7 +281,8 @@ class GameEngine:
             screen.blit(
                 restart_surf,
                 (
-                    self.width // 2 - restart_surf.get_width() // 2,
+                    self.width // 2
+                    - restart_surf.get_width() // 2,
                     self.height // 2 + 10
                 )
             )
