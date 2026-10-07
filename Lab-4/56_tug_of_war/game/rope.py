@@ -10,6 +10,7 @@ class Rope:
 
         self.left_win_x = 180
         self.right_win_x = screen_width - 180
+
         self.pull_step = 12
 
     def pull_left(self, strength=1.0):
@@ -29,15 +30,32 @@ class Rope:
         self.marker_x = float(self.screen_width // 2)
         self.velocity = 0.0
 
-    def render(self, surface):
-        pygame.draw.line(
+    def render(self, surface, tension=0.0):
+        # Animated rope vibration.
+        # Higher tension makes the rope vibrate more strongly.
+        time = pygame.time.get_ticks()
+        vibration = int(4 * tension)
+
+        rope_points = []
+
+        for x in range(60, self.screen_width - 59, 20):
+            offset = 0
+
+            if vibration > 0:
+                phase = (x // 20 + time // 60) % 2
+                offset = vibration if phase == 0 else -vibration
+
+            rope_points.append((x, self.center_y + offset))
+
+        pygame.draw.lines(
             surface,
             (180, 140, 90),
-            (60, self.center_y),
-            (self.screen_width - 60, self.center_y),
+            False,
+            rope_points,
             10
         )
 
+        # Player winning line
         pygame.draw.line(
             surface,
             (50, 200, 50),
@@ -45,6 +63,8 @@ class Rope:
             (self.left_win_x, self.center_y + 40),
             4
         )
+
+        # Computer winning line
         pygame.draw.line(
             surface,
             (200, 50, 50),
@@ -53,6 +73,7 @@ class Rope:
             4
         )
 
+        # Center line
         pygame.draw.line(
             surface,
             (120, 120, 120),
@@ -61,6 +82,25 @@ class Rope:
             2
         )
 
-        flag_rect = pygame.Rect(int(self.marker_x) - 12, self.center_y - 24, 24, 48)
-        pygame.draw.rect(surface, (230, 40, 40), flag_rect, border_radius=4)
-        pygame.draw.rect(surface, (255, 255, 255), flag_rect, width=2, border_radius=4)
+        # Rope marker / flag
+        flag_rect = pygame.Rect(
+            int(self.marker_x) - 12,
+            self.center_y - 24,
+            24,
+            48
+        )
+
+        pygame.draw.rect(
+            surface,
+            (230, 40, 40),
+            flag_rect,
+            border_radius=4
+        )
+
+        pygame.draw.rect(
+            surface,
+            (255, 255, 255),
+            flag_rect,
+            width=2,
+            border_radius=4
+        )
