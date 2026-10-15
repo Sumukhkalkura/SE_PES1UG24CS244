@@ -1,20 +1,17 @@
-# Lab 5 – Reflection
+# Lab 5 - Reflection
 
-**1. Which issues were the easiest to fix, and which were the hardest? Why?**
+1. Which issues were the easiest to fix, and which were the hardest? Why?
 
-The easiest were the Flake8 style issues and simple Pylint warnings: missing blank lines, long lines, the unused `json` import, and `== True`. Each has a single obvious mechanical fix. The hardest was removing `exec()` from `applyPromo`. Simply deleting it would break the promo feature, so I had to design a safe replacement: a strict regex that accepts only `amount = amount * <factor>` and checks the factor is between 0 and 1. The hardcoded admin password was also tricky, because removing it changes how the program is configured (it now reads `RENTAL_ADMIN_PASSWORD` from the environment). The logic bugs were hard in a different way. No tool reported them; I found them only by reading the program output (renting the same car twice, a cost of -9000).
+The easiest were the Flake8 formatting issues and small Pylint warnings like the unused json import, missing blank lines and long lines. These only needed simple changes. The hardest was removing exec() from applyPromo. Just deleting it would break the promo feature, so I wrote a regex that only accepts rules like "amount = amount * 0.9". The hardcoded admin password was also not straightforward since the password now has to come from an environment variable. The logic bugs (renting the same car twice, negative cost) were also hard because none of the tools reported them, I only found them by reading the program output.
 
-**2. Did the static analysis tools report any false positives? If so, describe one example.**
+2. Did the static analysis tools report any false positives? If so, describe one example.
 
-Partly. Bandit's B311 (`random` is not cryptographically secure) is borderline for a booking code that is not a secret. Switching to `secrets` was still cheap and harmless. Bandit's B608 on `findCustomer` was rated Low confidence, but it was a real vulnerability: the demo's `"x' OR '1'='1"` lookup returned every customer. Several issues were also reported by more than one tool (the bare `except` by Bandit, Pylint and Flake8; the unused import by Pylint and Flake8), which is duplication rather than a false positive.
+Bandit B311 (using random) is close to a false positive here, since a booking code is not really a secret. I still changed it to secrets because it was an easy change. The SQL injection warning on findCustomer had low confidence but it was a real problem, the test input x' OR '1'='1 returned every customer. Some issues were reported by more than one tool, for example the bare except was flagged by Bandit, Pylint and Flake8.
 
-**3. How would you integrate static analysis tools into your actual software development workflow?**
+3. How would you integrate static analysis tools into your actual software development workflow?
 
-Locally, I would run Flake8 and Bandit in a `pre-commit` hook so style and security problems are caught before a commit. In CI (e.g. GitHub Actions), I would run Pylint, Flake8 and Bandit on every push and pull request. The build would fail on any High/Medium Bandit finding, any Flake8 error, or a Pylint score below a threshold such as 9.5. Editor plugins give instant feedback while typing. Reports would be saved as build artifacts so reviewers can see them.
+I would add Flake8 and Bandit to a pre-commit hook so problems are caught before committing. In CI (for example GitHub Actions) I would run all three tools on every push and pull request, and fail the build if Bandit finds any high or medium issue, Flake8 reports errors, or the Pylint score goes below 9.5. Using linter plugins in the editor also helps catch issues while writing code.
 
-**4. What tangible improvements did you observe in code quality, readability, or robustness after applying the fixes?**
+4. What tangible improvements did you observe in code quality, readability, or potential robustness after applying the fixes?
 
-- **Security:** SQL injection, arbitrary code execution, the world-writable receipt file, the insecure temp file and the hardcoded password are all gone (Bandit: 11 issues → 0).
-- **Robustness:** invalid input now raises clear errors instead of failing silently or producing wrong numbers. Double-renting, negative costs and negative rates are rejected, and unknown plates raise `KeyError` instead of returning `None`.
-- **Readability:** snake_case names, docstrings, f-strings, named constants (`FREE_KM`, `EXTRA_KM_RATE`) and PEP 8 formatting make the code easier to read (Pylint 4.94 → 10.00, Flake8 25 → 0).
-- **Maintainability:** the `if __name__ == "__main__"` guard means the module can be imported (e.g. for tests) without running the demo.
+The security problems (SQL injection, exec, file permissions, temp file, hardcoded password) are fixed and Bandit now reports 0 issues. The program now gives proper errors for invalid input instead of failing silently or giving wrong values like a negative cost. The code is easier to read with snake_case names, docstrings, f-strings and named constants. The Pylint score went from 4.94 to 10.00 and Flake8 went from 25 issues to 0. The main() call is now under if __name__ == "__main__" so the file can be imported without running the demo.
