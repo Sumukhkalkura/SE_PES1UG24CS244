@@ -1,0 +1,10 @@
+$ python -m coverage erase
+$ python -m coverage run --branch --source=course_registration -m pytest -q BranchCoverageTest_course_registration_application.py
+...........................................                              [100%]
+43 passed in 0.03s
+$ python -m coverage report -m
+Name                     Stmts   Miss Branch BrPart  Cover   Missing
+--------------------------------------------------------------------
+course_registration.py      32      0     24      0   100%
+--------------------------------------------------------------------
+TOTAL                       32      0     24      0   100%
