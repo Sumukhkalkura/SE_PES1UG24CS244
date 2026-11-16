@@ -1,0 +1,7 @@
+# Local-only generated files for Lab 6
+.venv/
+__pycache__/
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
