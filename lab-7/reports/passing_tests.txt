@@ -1,0 +1,19 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.7, pytest-9.2.0, pluggy-1.7.0 -- /Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/.venv/bin/python
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: /Users/sumukhkalkura/SE_PES1UG24CS244/lab-7
+plugins: hypothesis-6.170.17
+collecting ... collected 9 items
+
+test_course_registration_parser.py::test_format_course_code_no_crash PASSED [ 11%]
+test_course_registration_parser.py::test_format_course_code_valid_inputs PASSED [ 22%]
+test_course_registration_parser.py::test_format_course_code_rejects_malformed_inputs PASSED [ 33%]
+test_course_registration_parser.py::test_total_credits_no_crash PASSED   [ 44%]
+test_course_registration_parser.py::test_total_credits_valid_inputs PASSED [ 55%]
+test_course_registration_parser.py::test_total_credits_rejects_malformed_inputs PASSED [ 66%]
+test_course_registration_parser.py::test_parse_student_record_no_crash PASSED [ 77%]
+test_course_registration_parser.py::test_parse_student_record_valid_inputs PASSED [ 88%]
+test_course_registration_parser.py::test_parse_student_record_rejects_malformed_inputs PASSED [100%]
+
+============================== 9 passed in 1.65s ===============================

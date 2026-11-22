@@ -1,0 +1,323 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.7, pytest-9.2.0, pluggy-1.7.0 -- /Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/.venv/bin/python
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: /Users/sumukhkalkura/SE_PES1UG24CS244/lab-7
+plugins: hypothesis-6.170.17
+collecting ... collected 9 items
+
+test_course_registration_parser.py::test_format_course_code_no_crash FAILED [ 11%]
+test_course_registration_parser.py::test_format_course_code_valid_inputs PASSED [ 22%]
+test_course_registration_parser.py::test_format_course_code_rejects_malformed_inputs FAILED [ 33%]
+test_course_registration_parser.py::test_total_credits_no_crash FAILED   [ 44%]
+test_course_registration_parser.py::test_total_credits_valid_inputs PASSED [ 55%]
+test_course_registration_parser.py::test_total_credits_rejects_malformed_inputs FAILED [ 66%]
+test_course_registration_parser.py::test_parse_student_record_no_crash FAILED [ 77%]
+test_course_registration_parser.py::test_parse_student_record_valid_inputs PASSED [ 88%]
+test_course_registration_parser.py::test_parse_student_record_rejects_malformed_inputs FAILED [100%]
+
+=================================== FAILURES ===================================
+_______________________ test_format_course_code_no_crash _______________________
+  + Exception Group Traceback (most recent call last):
+  |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 50, in test_format_course_code_no_crash
+  |     @given(st.text() | st.none() | course_code_like)
+  |                    ^^^
+  | ExceptionGroup: Hypothesis found 4 distinct failures. (4 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 63, in test_format_course_code_no_crash
+    |     assert number.isascii() and number.isdigit(), f"accepted course number {number!r}"
+    | AssertionError: accepted course number ':'
+    | assert (True and False)
+    |  +  where True = <built-in method isascii of str object at 0x1015fdea0>()
+    |  +    where <built-in method isascii of str object at 0x1015fdea0> = ':'.isascii
+    |  +  and   False = <built-in method isdigit of str object at 0x1015fdea0>()
+    |  +    where <built-in method isdigit of str object at 0x1015fdea0> = ':'.isdigit
+    | Failing test case: test_format_course_code_no_crash(
+    |     s='A :',
+    | )
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 62, in test_format_course_code_no_crash
+    |     assert dept.isascii() and dept.isalpha(), f"accepted department {dept!r}"
+    | AssertionError: accepted department '0'
+    | assert (True and False)
+    |  +  where True = <built-in method isascii of str object at 0x1015fdcc0>()
+    |  +    where <built-in method isascii of str object at 0x1015fdcc0> = '0'.isascii
+    |  +  and   False = <built-in method isalpha of str object at 0x1015fdcc0>()
+    |  +    where <built-in method isalpha of str object at 0x1015fdcc0> = '0'.isalpha
+    | Failing test case: test_format_course_code_no_crash(
+    |     s='0 0',
+    | )
+    +---------------- 3 ----------------
+    | Traceback (most recent call last):
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 53, in test_format_course_code_no_crash
+    |     result = format_course_code(s)
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/course_registration_parser.py", line 6, in format_course_code
+    |     dept, number = code.split()
+    |     ^^^^^^^^^^^^
+    | ValueError: not enough values to unpack (expected 2, got 0)
+    | 
+    | During handling of the above exception, another exception occurred:
+    | 
+    | Traceback (most recent call last):
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 55, in test_format_course_code_no_crash
+    |     assert False, f"format_course_code crashed with {type(e).__name__}: {e}"
+    | AssertionError: format_course_code crashed with ValueError: not enough values to unpack (expected 2, got 0)
+    | assert False
+    | Failing test case: test_format_course_code_no_crash(
+    |     s='',  # or any other generated value
+    | )
+    | Explanation:
+    |     These lines were always and only run by failing test cases:
+    |         /Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py:54
+    +---------------- 4 ----------------
+    | Traceback (most recent call last):
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 53, in test_format_course_code_no_crash
+    |     result = format_course_code(s)
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/course_registration_parser.py", line 6, in format_course_code
+    |     dept, number = code.split()
+    |                    ^^^^^^^^^^
+    | AttributeError: 'NoneType' object has no attribute 'split'
+    | 
+    | During handling of the above exception, another exception occurred:
+    | 
+    | Traceback (most recent call last):
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 55, in test_format_course_code_no_crash
+    |     assert False, f"format_course_code crashed with {type(e).__name__}: {e}"
+    | AssertionError: format_course_code crashed with AttributeError: 'NoneType' object has no attribute 'split'
+    | assert False
+    | Failing test case: test_format_course_code_no_crash(
+    |     s=None,  # or any other generated value
+    | )
+    | Explanation:
+    |     These lines were always and only run by failing test cases:
+    |         /Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py:54
+    +------------------------------------
+_______________ test_format_course_code_rejects_malformed_inputs _______________
+
+    def test_format_course_code_rejects_malformed_inputs():
+        malformed = [None, "", "   ", "cs", "301", "cs301", "cs 301 extra", "301 cs",
+                     "cs 3O1", "cs-301", "c$ 301", "çs 301", "cs ٣٠١", 301, b"cs 301"]
+        bad = {}
+        for value in malformed:
+            try:
+                result = format_course_code(value)
+            except Exception as e:
+                result = f"crashed: {type(e).__name__}"
+            if result is not None:
+                bad[repr(value)] = result
+>       assert not bad, f"malformed course codes not rejected: {bad}"
+E       AssertionError: malformed course codes not rejected: {'None': 'crashed: AttributeError', "''": 'crashed: ValueError', "'   '": 'crashed: ValueError', "'cs'": 'crashed: ValueError', "'301'": 'crashed: ValueError', "'cs301'": 'crashed: ValueError', "'cs 301 extra'": 'crashed: ValueError', "'301 cs'": '301cs', "'cs 3O1'": 'CS3O1', "'cs-301'": 'crashed: ValueError', "'c$ 301'": 'C$301', "'çs 301'": 'ÇS301', "'cs ٣٠١'": 'CS٣٠١', '301': 'crashed: AttributeError', "b'cs 301'": b'CS301'}
+E       assert not {'None': 'crashed: AttributeError', "''": 'crashed: ValueError', "'   '": 'crashed: ValueError', "'cs'": 'crashed: ValueError', ...}
+
+test_course_registration_parser.py:87: AssertionError
+_________________________ test_total_credits_no_crash __________________________
+  + Exception Group Traceback (most recent call last):
+  |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 93, in test_total_credits_no_crash
+  |     @given(st.text() | st.none() | credit_list_like)
+  |                    ^^^
+  | ExceptionGroup: Hypothesis found 3 distinct failures. (3 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 104, in test_total_credits_no_crash
+    |     assert credit.isascii() and credit.isdigit(), f"accepted credit {credit!r} in {s!r}"
+    | AssertionError: accepted credit '-0' in '-0'
+    | assert (True and False)
+    |  +  where True = <built-in method isascii of str object at 0x10767b060>()
+    |  +    where <built-in method isascii of str object at 0x10767b060> = '-0'.isascii
+    |  +  and   False = <built-in method isdigit of str object at 0x10767b060>()
+    |  +    where <built-in method isdigit of str object at 0x10767b060> = '-0'.isdigit
+    | Failing test case: test_total_credits_no_crash(
+    |     s='-0',
+    | )
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 96, in test_total_credits_no_crash
+    |     result = total_credits(s)
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/course_registration_parser.py", line 14, in total_credits
+    |     return sum(int(credit) for credit in text.split(','))
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/course_registration_parser.py", line 14, in <genexpr>
+    |     return sum(int(credit) for credit in text.split(','))
+    |                ~~~^^^^^^^^
+    | ValueError: invalid literal for int() with base 10: ''
+    | 
+    | During handling of the above exception, another exception occurred:
+    | 
+    | Traceback (most recent call last):
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 98, in test_total_credits_no_crash
+    |     assert False, f"total_credits crashed with {type(e).__name__}: {e}"
+    | AssertionError: total_credits crashed with ValueError: invalid literal for int() with base 10: ''
+    | assert False
+    | Failing test case: test_total_credits_no_crash(
+    |     s='',  # or any other generated value
+    | )
+    | Explanation:
+    |     These lines were always and only run by failing test cases:
+    |         /Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py:97
+    +---------------- 3 ----------------
+    | Traceback (most recent call last):
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 96, in test_total_credits_no_crash
+    |     result = total_credits(s)
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/course_registration_parser.py", line 14, in total_credits
+    |     return sum(int(credit) for credit in text.split(','))
+    |                                          ^^^^^^^^^^
+    | AttributeError: 'NoneType' object has no attribute 'split'
+    | 
+    | During handling of the above exception, another exception occurred:
+    | 
+    | Traceback (most recent call last):
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 98, in test_total_credits_no_crash
+    |     assert False, f"total_credits crashed with {type(e).__name__}: {e}"
+    | AssertionError: total_credits crashed with AttributeError: 'NoneType' object has no attribute 'split'
+    | assert False
+    | Failing test case: test_total_credits_no_crash(
+    |     s=None,
+    | )
+    | Explanation:
+    |     These lines were always and only run by failing test cases:
+    |         /Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py:97
+    +------------------------------------
+_________________ test_total_credits_rejects_malformed_inputs __________________
+
+    def test_total_credits_rejects_malformed_inputs():
+        malformed = [None, "", "   ", ",", "4,,3", "4,3,", ",4", "four", "4,three", "-3",
+                     "4,-3", "3.5", "+4", "4_000", "١,٢", "9" * 5000, 4, [4, 3]]
+        bad = {}
+        for value in malformed:
+            try:
+                result = total_credits(value)
+            except Exception as e:
+                result = f"crashed: {type(e).__name__}"
+            if result is not None:
+                bad[repr(value)[:40]] = result
+>       assert not bad, f"malformed credit lists not rejected: {bad}"
+E       AssertionError: malformed credit lists not rejected: {'None': 'crashed: AttributeError', "''": 'crashed: ValueError', "'   '": 'crashed: ValueError', "','": 'crashed: ValueError', "'4,,3'": 'crashed: ValueError', "'4,3,'": 'crashed: ValueError', "',4'": 'crashed: ValueError', "'four'": 'crashed: ValueError', "'4,three'": 'crashed: ValueError', "'-3'": -3, "'4,-3'": 1, "'3.5'": 'crashed: ValueError', "'+4'": 4, "'4_000'": 4000, "'١,٢'": 3, "'999999999999999999999999999999999999999": 'crashed: ValueError', '4': 'crashed: AttributeError', '[4, 3]': 'crashed: AttributeError'}
+E       assert not {'None': 'crashed: AttributeError', "''": 'crashed: ValueError', "'   '": 'crashed: ValueError', "','": 'crashed: ValueError', ...}
+
+test_course_registration_parser.py:129: AssertionError
+______________________ test_parse_student_record_no_crash ______________________
+  + Exception Group Traceback (most recent call last):
+  |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 135, in test_parse_student_record_no_crash
+  |     @given(st.text() | st.none() | student_record_like)
+  |                    ^^^
+  | ExceptionGroup: Hypothesis found 6 distinct failures. (6 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 145, in test_parse_student_record_no_crash
+    |     assert len(fields) == 3, f"accepted {s!r}, which does not have exactly 3 fields"
+    | AssertionError: accepted '|||', which does not have exactly 3 fields
+    | assert 4 == 3
+    |  +  where 4 = len(['', '', '', ''])
+    | Failing test case: test_parse_student_record_no_crash(
+    |     s='|||',
+    | )
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 148, in test_parse_student_record_no_crash
+    |     assert name, "accepted an empty name"
+    | AssertionError: accepted an empty name
+    | assert ''
+    | Failing test case: test_parse_student_record_no_crash(
+    |     s='0||',
+    | )
+    +---------------- 3 ----------------
+    | Traceback (most recent call last):
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 147, in test_parse_student_record_no_crash
+    |     assert srn.isascii() and srn.isalnum(), f"accepted SRN {srn!r}"
+    | AssertionError: accepted SRN ''
+    | assert (True and False)
+    |  +  where True = <built-in method isascii of str object at 0x1015f3cd0>()
+    |  +    where <built-in method isascii of str object at 0x1015f3cd0> = ''.isascii
+    |  +  and   False = <built-in method isalnum of str object at 0x1015f3cd0>()
+    |  +    where <built-in method isalnum of str object at 0x1015f3cd0> = ''.isalnum
+    | Failing test case: test_parse_student_record_no_crash(
+    |     s='||',
+    | )
+    +---------------- 4 ----------------
+    | Traceback (most recent call last):
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 138, in test_parse_student_record_no_crash
+    |     result = parse_student_record(s)
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/course_registration_parser.py", line 24, in parse_student_record
+    |     "status": parts[2].strip().lower()}
+    |               ~~~~~^^^
+    | IndexError: list index out of range
+    | 
+    | During handling of the above exception, another exception occurred:
+    | 
+    | Traceback (most recent call last):
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 140, in test_parse_student_record_no_crash
+    |     assert False, f"parse_student_record crashed with {type(e).__name__}: {e}"
+    | AssertionError: parse_student_record crashed with IndexError: list index out of range
+    | assert False
+    | Failing test case: test_parse_student_record_no_crash(
+    |     s='|',
+    | )
+    +---------------- 5 ----------------
+    | Traceback (most recent call last):
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 138, in test_parse_student_record_no_crash
+    |     result = parse_student_record(s)
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/course_registration_parser.py", line 23, in parse_student_record
+    |     "name": parts[1].strip(),
+    |             ~~~~~^^^
+    | IndexError: list index out of range
+    | 
+    | During handling of the above exception, another exception occurred:
+    | 
+    | Traceback (most recent call last):
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 140, in test_parse_student_record_no_crash
+    |     assert False, f"parse_student_record crashed with {type(e).__name__}: {e}"
+    | AssertionError: parse_student_record crashed with IndexError: list index out of range
+    | assert False
+    | Failing test case: test_parse_student_record_no_crash(
+    |     s='',  # or any other generated value
+    | )
+    +---------------- 6 ----------------
+    | Traceback (most recent call last):
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 138, in test_parse_student_record_no_crash
+    |     result = parse_student_record(s)
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/course_registration_parser.py", line 21, in parse_student_record
+    |     parts = line.split('|')
+    |             ^^^^^^^^^^
+    | AttributeError: 'NoneType' object has no attribute 'split'
+    | 
+    | During handling of the above exception, another exception occurred:
+    | 
+    | Traceback (most recent call last):
+    |   File "/Users/sumukhkalkura/SE_PES1UG24CS244/lab-7/test_course_registration_parser.py", line 140, in test_parse_student_record_no_crash
+    |     assert False, f"parse_student_record crashed with {type(e).__name__}: {e}"
+    | AssertionError: parse_student_record crashed with AttributeError: 'NoneType' object has no attribute 'split'
+    | assert False
+    | Failing test case: test_parse_student_record_no_crash(
+    |     s=None,  # or any other generated value
+    | )
+    +------------------------------------
+______________ test_parse_student_record_rejects_malformed_inputs ______________
+
+    def test_parse_student_record_rejects_malformed_inputs():
+        malformed = [None, "", "   ", "pes1ug24cs244", "pes1ug24cs244|Sumukh Kalkura",
+                     "pes1ug24cs244|Sumukh Kalkura|regular|extra", "pes1ug24cs244||regular",
+                     "|Sumukh Kalkura|regular", "pes1ug24cs244|Sumukh Kalkura| ", "||", "|||",
+                     "pes 1ug24|Sumukh Kalkura|regular", "pes1ug24cs244|Sumukh Kalkura|régular",
+                     "pes1ug24cs244|Sumukh Kalkura|regular-2", 42]
+        bad = {}
+        for value in malformed:
+            try:
+                result = parse_student_record(value)
+            except Exception as e:
+                result = f"crashed: {type(e).__name__}"
+            if result is not None:
+                bad[repr(value)] = result
+>       assert not bad, f"malformed student records not rejected: {bad}"
+E       AssertionError: malformed student records not rejected: {'None': 'crashed: AttributeError', "''": 'crashed: IndexError', "'   '": 'crashed: IndexError', "'pes1ug24cs244'": 'crashed: IndexError', "'pes1ug24cs244|Sumukh Kalkura'": 'crashed: IndexError', "'pes1ug24cs244|Sumukh Kalkura|regular|extra'": {'srn': 'PES1UG24CS244', 'name': 'Sumukh Kalkura', 'status': 'regular'}, "'pes1ug24cs244||regular'": {'srn': 'PES1UG24CS244', 'name': '', 'status': 'regular'}, "'|Sumukh Kalkura|regular'": {'srn': '', 'name': 'Sumukh Kalkura', 'status': 'regular'}, "'pes1ug24cs244|Sumukh Kalkura| '": {'srn': 'PES1UG24CS244', 'name': 'Sumukh Kalkura', 'status': ''}, "'||'": {'srn': '', 'name': '', 'status': ''}, "'|||'": {'srn': '', 'name': '', 'status': ''}, "'pes 1ug24|Sumukh Kalkura|regular'": {'srn': 'PES 1UG24', 'name': 'Sumukh Kalkura', 'status': 'regular'}, "'pes1ug24cs244|Sumukh Kalkura|régular'": {'srn': 'PES1UG24CS244', 'name': 'Sumukh Kalkura', 'status': 'régular'}, "'pes1ug24cs244|Sumukh Kalkura|regular-2'": {'srn': 'PES1UG24CS244', 'name': 'Sumukh Kalkura', 'status': 'regular-2'}, '42': 'crashed: AttributeError'}
+E       assert not {'None': 'crashed: AttributeError', "''": 'crashed: IndexError', "'   '": 'crashed: IndexError', "'pes1ug24cs244'": 'crashed: IndexError', ...}
+
+test_course_registration_parser.py:180: AssertionError
+=========================== short test summary info ============================
+FAILED test_course_registration_parser.py::test_format_course_code_no_crash
+FAILED test_course_registration_parser.py::test_format_course_code_rejects_malformed_inputs
+FAILED test_course_registration_parser.py::test_total_credits_no_crash - Exce...
+FAILED test_course_registration_parser.py::test_total_credits_rejects_malformed_inputs
+FAILED test_course_registration_parser.py::test_parse_student_record_no_crash
+FAILED test_course_registration_parser.py::test_parse_student_record_rejects_malformed_inputs
+========================= 6 failed, 3 passed in 1.34s ==========================
